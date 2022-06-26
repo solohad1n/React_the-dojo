@@ -7,6 +7,22 @@ const Signup = () => {
   const [displayName, setDisplayName] = useState('')
   const [thumbnail, setThumbnail] = useState(null)
 
+  const [thumbnailError, setThumbnailError] = useState(null)
+
+  const handleChangeFile = (event) => {
+    setThumbnail(null)
+    const selected = event.target.files[0]
+
+    if (!selected) return setThumbnailError('Пожалуйста, выберите файл')
+    if (!selected.type.includes('image')) return setThumbnailError('Пожалуйста, выберите картинку')
+    if (selected.size >= 1000000) return setThumbnailError('Пожалуйста, файл менее 100кб')
+
+    setThumbnail(selected)
+    setThumbnailError(null)
+  }
+
+
+
   return (
     <form className='auth-form'>
       <h2>Sign up</h2>
@@ -24,8 +40,10 @@ const Signup = () => {
       </label>
       <label>
         <span>Profile thumbnail:</span>
-        <input required type='email' onChange={(e) => setThumbnail(e.target.value)} value={thumbnail} />
+        <input required type='file' onChange={handleChangeFile} />
+        {thumbnailError && <span className='error'>{thumbnailError}</span>}
       </label>
+      <button className='btn'>Sign up</button>
     </form>
   )
 }
