@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useSignup } from '../../Hooks/useSignup'
 import './styles.css'
 
 const Signup = () => {
@@ -6,6 +7,7 @@ const Signup = () => {
   const [password, setPassword] = useState('')
   const [displayName, setDisplayName] = useState('')
   const [thumbnail, setThumbnail] = useState(null)
+  const { signup, error, isPending } = useSignup()
 
   const [thumbnailError, setThumbnailError] = useState(null)
 
@@ -21,10 +23,14 @@ const Signup = () => {
     setThumbnailError(null)
   }
 
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    await signup(email, password, displayName, thumbnail)
+  }
 
 
   return (
-    <form className='auth-form'>
+    <form onSubmit={handleSubmit} className='auth-form'>
       <h2>Sign up</h2>
       <label>
         <span>Email:</span>
@@ -36,14 +42,16 @@ const Signup = () => {
       </label>
       <label>
         <span>Display Name:</span>
-        <input required type='email' onChange={(e) => setDisplayName(e.target.value)} value={displayName} />
+        <input required type='name' onChange={(e) => setDisplayName(e.target.value)} value={displayName} />
       </label>
       <label>
         <span>Profile thumbnail:</span>
         <input required type='file' onChange={handleChangeFile} />
         {thumbnailError && <span className='error'>{thumbnailError}</span>}
       </label>
-      <button className='btn'>Sign up</button>
+      {!isPending && <button className='btn'>Sign up</button>}
+      {isPending && <button className='btn'>Loading...</button>}
+      {error && <div className='error'>{error}</div>}
     </form>
   )
 }
