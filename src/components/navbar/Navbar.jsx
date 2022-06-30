@@ -1,9 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Temple from '../../assets/temple.svg'
+import { useLoginout } from '../../Hooks/useLoginout'
 import './styles.css'
 
 const Navbar = () => {
+  const { logout, error, isPending } = useLoginout()
   return (
     <nav className='navbar'>
       <ul>
@@ -18,7 +20,9 @@ const Navbar = () => {
           <Link to='/signup'>Signup</Link>
         </li>
         <li>
-          <button className='btn'>Logout</button>
+          {!isPending && <button onClick={logout} className='btn'>Logout</button>}
+          {isPending && <button className='btn'>Loading...</button>}
+          {error && <div className='error'>{error}</div>}
         </li>
       </ul>
     </nav>
