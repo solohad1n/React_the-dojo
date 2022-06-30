@@ -14,7 +14,7 @@ export const useLoginout = () => {
     setError(null)
     setIsPending(true)
     try {
-      const usersRef = doc(Firestore, 'users', user.uid);
+      const usersRef = doc(firestore, 'users', user.uid);
       await setDoc(
         usersRef,
         {

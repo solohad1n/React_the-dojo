@@ -1,6 +1,7 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import { auth } from '../Firebase/config'
+import { auth, firestore } from '../firebase/config'
 import { useAuthContext } from "./useAuthContext";
 
 export const useLogin = () => {
@@ -15,6 +16,9 @@ export const useLogin = () => {
 
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password)
+
+      const usersRef = doc(firestore, 'users', user.uid)
+      await setDoc(usersRef, { isOnline: true }, { merge: true })
 
       dispatch({ type: 'LOGIN', payload: user })
 
