@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useSignup } from '../../Hooks/useSignup'
 import './styles.css'
 
@@ -8,6 +9,7 @@ const Signup = () => {
   const [displayName, setDisplayName] = useState('')
   const [thumbnail, setThumbnail] = useState(null)
   const { signup, error, isPending } = useSignup()
+  const navigate = useNavigate()
 
   const [thumbnailError, setThumbnailError] = useState(null)
 
@@ -26,6 +28,7 @@ const Signup = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     await signup(email, password, displayName, thumbnail)
+    navigate('/')
   }
 
 

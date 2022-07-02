@@ -18,14 +18,12 @@ export const useLogin = () => {
       const { user } = await signInWithEmailAndPassword(auth, email, password)
 
       const usersRef = doc(firestore, 'users', user.uid)
+
       await setDoc(usersRef, { isOnline: true }, { merge: true })
 
+      setIsCanlled(false);
+      setError(null);
       dispatch({ type: 'LOGIN', payload: user })
-
-      if (!isCancelled) {
-        setIsCanlled(false);
-        setError(null);
-      }
     } catch (err) {
       if (!isCancelled) {
         setError(err.message)
