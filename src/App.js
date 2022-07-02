@@ -15,16 +15,17 @@ const PrivateRoute = (Component) => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!user) navigate('./login')
+    if (!user) navigate('/login')
   }, [navigate, user])
 
   return Component
 }
 
 function App() {
+  const { user } = useAuthContext();
   return (
     <div className="App">
-      <Sidebar />
+      {user && <Sidebar />}
       <div className='container'>
         <Navbar />
         <Routes>

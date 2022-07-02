@@ -1,11 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom'
 import { AuthContextProvider } from './context/AuthContext';
+import { createRoot } from 'react-dom/client'
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container);
+
+root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthContextProvider>
@@ -13,5 +16,4 @@ ReactDOM.render(
       </AuthContextProvider>
     </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById('root')
 );
