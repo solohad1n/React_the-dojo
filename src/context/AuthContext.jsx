@@ -22,9 +22,7 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     const cancel = onAuthStateChanged(auth, (_user) => {
-      if (!_user) {
-        dispatch({ type: 'LOGOUT' })
-      }
+      dispatch({ type: 'LOGIN', payload: _user })
     })
     return () => cancel();
   }, [])
