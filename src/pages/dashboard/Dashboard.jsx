@@ -1,6 +1,7 @@
 import React from 'react'
-import Projects from '../../components/projects/projects'
+import Projects from '../../components/projects/Projects'
 import { useGetCollection } from '../../Hooks/useCollection'
+import './styles.css'
 
 function Dashboard() {
   const { documents, error } = useGetCollection('projects')
