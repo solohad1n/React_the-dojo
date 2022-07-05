@@ -1,14 +1,17 @@
-import React, { useState } from 'react'
-import { useEffect } from 'react/cjs/react.production.min'
+import React, { useEffect, useState } from 'react'
+import Select from 'react-select'
+import { useGetCollection } from '../../Hooks/useCollection'
 
 const categories = [
   { value: 'development', label: 'Development' },
   { value: 'design', label: 'Design' },
   { value: 'sales', label: 'Sales' },
-  { value: 'marketing', label: 'Marketing' }
+  { value: 'marketing', label: 'Marketing' },
 ]
 
 const Create = () => {
+  const { documents, error } = useGetCollection('users')
+  const [users, setUsers] = useState([])
   const [name, setName] = useState('')
   const [details, setDetails] = useState('')
   const [dueDate, setDueDate] = useState('')
@@ -18,15 +21,19 @@ const Create = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-  }
 
-  if (!category) {
-    setFormError("Please, select a project category!")
-    return
-  }
-  if (!assignedUser.length) {
-    setFormError('Please assign the project to at least 1 user')
-    return
+
+    setFormError(null)
+
+    if (!category) {
+      setFormError("Please, select a project category!")
+      return
+    }
+    if (!assignedUser.length) {
+      setFormError('Please assign the project to at least 1 user')
+      return
+    }
+
   }
 
   const assignedUsersList = assignedUser.map((u) => {
@@ -78,7 +85,6 @@ const Create = () => {
           <span>Project Details:</span>
           <input
             required
-            type="text"
             onChange={(e) => setDetails(e.target.value)}
             value={details}
           />
@@ -87,15 +93,26 @@ const Create = () => {
           <span>Set due date:</span>
           <input
             required
-            type="text"
+            type="date"
             onChange={(e) => setDueDate(e.target.value)}
             value={dueDate}
           />
         </label>
         <label>
-          <span>Assign to:</span>
+          <span>Project category :</span>
+          <Select
+            onChange={(option) => { setCategory(option) }}
+            options={categories} />
         </label>
+        <label>
+          <span>Assign to:</span>
+          <Select
+            onChange={(option) => { setAssignedUser(option) }}
+            options={users} />
+        </label>
+        {formError && <div className='error'>{formError}</div>}
         <button className='btn'>Add Project</button>
+
       </form>
     </div>
   )

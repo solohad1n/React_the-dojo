@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuthContext } from '../../Hooks/useAuthContext'
 import { useSignup } from '../../Hooks/useSignup'
 import './styles.css'
 
@@ -10,7 +11,7 @@ const Signup = () => {
   const [thumbnail, setThumbnail] = useState(null)
   const { signup, error, isPending } = useSignup()
   const navigate = useNavigate()
-
+  const { user } = useAuthContext()
   const [thumbnailError, setThumbnailError] = useState(null)
 
   const handleChangeFile = (event) => {
@@ -30,6 +31,12 @@ const Signup = () => {
     await signup(email, password, displayName, thumbnail)
     navigate('/')
   }
+
+  useEffect(() => {
+    if (user) {
+      navigate('/')
+    }
+  }, [navigate, user])
 
 
   return (

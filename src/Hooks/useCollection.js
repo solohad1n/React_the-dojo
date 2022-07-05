@@ -1,6 +1,6 @@
 import { addDoc, collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useReducer, useState } from "react";
-import { firestore } from "../Firebase/config";
+import { firestore } from "../firebase/config";
 
 const initialState = {
   document: null,
@@ -61,14 +61,13 @@ export const useCollection = () => {
   return { addDocument, deleteDocument, isCancelled, response }
 }
 
-export const getGetCollection = (collectionName, userId) => {
+export const useGetCollection = (collectionName, options) => {
   const [documents, setDocuments] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const collectionRef = query(
       collection(firestore, collectionName)
-      where('usersId', '==', userId)
     )
 
 
@@ -84,6 +83,6 @@ export const getGetCollection = (collectionName, userId) => {
     return () => {
       unsubscribe()
     }
-  }, [collection])
+  }, [collectionName, options])
   return { documents, error }
 }
