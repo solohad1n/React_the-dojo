@@ -1,4 +1,4 @@
-import { addDoc, collection, onSnapshot, query, where } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, query, serverTimestamp, where } from "firebase/firestore";
 import { useEffect, useReducer, useState } from "react";
 import { firestore } from "../firebase/config";
 
@@ -35,19 +35,24 @@ const firestoreReducer = (state, action) => {
   }
 }
 
-export const useCollection = () => {
+export const useCollection = (collectionName) => {
   const [isCancelled, setIsCancelled] = useState(false);
   const [response, dispatch] = useReducer(firestoreReducer, initialState)
 
-  const collectionRef = collection(firestore, 'transactions')
+  const collectionRef = collection(firestore, collectionName)
 
 
   const addDocument = async (newDocument) => {
     dispatch({ type: 'IS_PENDING' })
     try {
-      const addedDoc = await addDoc(collectionRef, newDocument)
+      const addedDoc = await addDoc(collectionRef, {
+        ...newDocument,
+        createdAt: serverTimestamp(),
+      })
+      console.log(addedDoc)
       dispatch({ type: 'ADDED_DOCUMENT', payload: addedDoc })
     } catch (err) {
+      console.log(err.message)
       dispatch({ type: 'ERROR', payload: err.message })
     }
   }

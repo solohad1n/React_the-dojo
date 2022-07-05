@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Select from 'react-select'
-import { useGetCollection } from '../../Hooks/useCollection'
+import { useCollection, useGetCollection } from '../../Hooks/useCollection'
+import { useAuthContext } from '../../Hooks/useAuthContext'
+import { Timestamp } from 'firebase/firestore'
+import { useNavigate } from 'react-router-dom'
 
 const categories = [
   { value: 'development', label: 'Development' },
@@ -10,7 +13,10 @@ const categories = [
 ]
 
 const Create = () => {
-  const { documents, error } = useGetCollection('users')
+  const navigate = useNavigate()
+  const { user } = useAuthContext()
+  const { addDocument, response } = useCollection('projects')
+  const { documents } = useGetCollection('users')
   const [users, setUsers] = useState([])
   const [name, setName] = useState('')
   const [details, setDetails] = useState('')
@@ -19,7 +25,7 @@ const Create = () => {
   const [assignedUser, setAssignedUser] = useState([])
   const [formError, setFormError] = useState('')
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
 
@@ -34,29 +40,38 @@ const Create = () => {
       return
     }
 
-  }
+    const assignedUsersList = assignedUser.map((u) => {
+      return {
+        displayName: u.value.displayName,
+        photoURL: u.value.photoURL,
+        id: u.value.id,
+      }
+    })
 
-  const assignedUsersList = assignedUser.map((u) => {
-    return {
-      displayName: u.value.displayName,
-      photoURL: u.value.photoURL,
-      id: u.value.id,
+    const createdBy = {
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      id: user.uid,
     }
-  })
 
-  const createdBy = {
-
+    const project = {
+      name,
+      details,
+      category: category.value,
+      dueDate: Timestamp.fromDate(new Date(dueDate)),
+      assignedUsersList,
+      createdBy,
+      comments: [],
+    }
+    await addDocument(project)
+    if (!response.error) {
+      navigate('/')
+    } else {
+      console.log(response.error)
+    }
   }
 
-  const project = {
-    name,
-    details,
-    category: category.value,
-    dueDate: new Date(dueDate),
-    assignedUsersList,
-    createdBy,
-    comments: [],
-  }
+
 
   useEffect(() => {
     if (documents) {
@@ -83,7 +98,7 @@ const Create = () => {
         </label>
         <label>
           <span>Project Details:</span>
-          <input
+          <textarea
             required
             onChange={(e) => setDetails(e.target.value)}
             value={details}
@@ -108,7 +123,8 @@ const Create = () => {
           <span>Assign to:</span>
           <Select
             onChange={(option) => { setAssignedUser(option) }}
-            options={users} />
+            options={users}
+            isMulti />
         </label>
         {formError && <div className='error'>{formError}</div>}
         <button className='btn'>Add Project</button>
