@@ -1,8 +1,23 @@
 import React from 'react'
+import { useDocument } from '../../Hooks/useDocument'
+import { useParams } from 'react-router-dom'
+import ProjectSummary from './ProjectSummary'
 
 function Project() {
+  const params = useParams()
+  const { document, error } = useDocument('projects', params.id)
+
+  if (error) {
+    return <div className='error'>{error}</div>
+  }
+  // if (!document) {
+  //   return <div className='loading'>Loading...</div>
+  // }
+
   return (
-    <div>Project</div>
+    <div className='project-details'>
+      <ProjectSummary project={document} />
+    </div>
   )
 }
 
