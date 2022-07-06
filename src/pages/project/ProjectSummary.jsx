@@ -7,7 +7,7 @@ const ProjectSummary = ({ project }) => {
       <div className='project-summary'>
         <h2 className='page-title'>{project.name}</h2>
         <p className='due-date'>
-          Дедлайн {project.dueDate.toDate().toDateString()}
+          Срок: {project.dueDate.toDate().toDateString()}
         </p>
         <p className='details'>{project.details}</p>
         <h4>Исполнители:</h4>

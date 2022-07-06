@@ -2,7 +2,7 @@ import { doc, onSnapshot } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { firestore } from "../firebase/config"
 
-export const useDocument = async (collectionName, id) => {
+export const useDocument = (collectionName, id) => {
   const [document, setDocument] = useState(null)
   const [error, setError] = useState(null)
 
@@ -12,12 +12,16 @@ export const useDocument = async (collectionName, id) => {
     const unsubscribe = onSnapshot(
       docRef,
       (snap) => {
-        setDocument(snap.data())
-        setError(null)
+        if (snap.data()) {
+          setDocument({ ...snap.data(), id: snap.id })
+          setError(null)
+        }
+        else {
+          setError('Такого проекта нет!')
+        }
       },
       (err) => {
         setError(err)
-        setDocument(null)
       }
     )
     return () => unsubscribe()

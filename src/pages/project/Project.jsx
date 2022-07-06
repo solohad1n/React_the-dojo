@@ -2,6 +2,7 @@ import React from 'react'
 import { useDocument } from '../../Hooks/useDocument'
 import { useParams } from 'react-router-dom'
 import ProjectSummary from './ProjectSummary'
+import './styles.css'
 
 function Project() {
   const params = useParams()
@@ -10,9 +11,9 @@ function Project() {
   if (error) {
     return <div className='error'>{error}</div>
   }
-  // if (!document) {
-  //   return <div className='loading'>Loading...</div>
-  // }
+  if (!document && !error) {
+    return <div className='loading'>Loading...</div>
+  }
 
   return (
     <div className='project-details'>
