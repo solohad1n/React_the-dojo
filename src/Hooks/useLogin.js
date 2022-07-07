@@ -21,7 +21,7 @@ export const useLogin = () => {
       await setDoc(usersRef, { isOnline: true }, { merge: true })
       await dispatch({ type: 'LOGIN', payload: user })
 
-
+      setIsPending(false)
       setError(null);
       return user
     } catch (err) {
