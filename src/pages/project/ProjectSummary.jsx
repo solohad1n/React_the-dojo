@@ -1,5 +1,6 @@
 import React from 'react';
 import Avatar from '../../components/avatar/Avatar';
+import { dueDate } from '../../helpers/date';
 
 const ProjectSummary = ({ project }) => {
   return (
@@ -7,7 +8,7 @@ const ProjectSummary = ({ project }) => {
       <div className='project-summary'>
         <h2 className='page-title'>{project.name}</h2>
         <p className='due-date'>
-          Срок: {project.dueDate.toDate().toDateString()}
+          Срок: {dueDate(project.dueDate.toDate())}
         </p>
         <p className='details'>{project.details}</p>
         <h4>Исполнители:</h4>

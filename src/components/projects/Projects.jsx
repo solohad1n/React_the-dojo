@@ -2,6 +2,7 @@ import React from 'react';
 import './style.css'
 import { Link } from 'react-router-dom'
 import Avatar from '../avatar/Avatar'
+import { dueDate } from '../../helpers/date';
 
 const Projects = ({ projects }) => {
   return (
@@ -11,7 +12,7 @@ const Projects = ({ projects }) => {
         return (
           <Link to={`/project/${project.id}`} key={project.id}>
             <h4>{project.name}</h4>
-            <p>Due by {project.dueDate.toDate().toDateString()}</p>
+            <p>Срок: {dueDate(project.dueDate.toDate())}</p>
             <div className='assigned-to'>
               <ul>
                 {project.assignedUsersList.map((user) => (
