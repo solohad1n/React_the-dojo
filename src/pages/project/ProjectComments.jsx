@@ -1,25 +1,54 @@
-import { serverTimestamp } from 'firebase/firestore';
+import { Timestamp } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { useAuthContext } from '../../Hooks/useAuthContext'
+import { useCollection } from '../../Hooks/useCollection';
+import { v4 as uuidv4 } from 'uuid'
+import Avatar from '../../components/avatar/Avatar';
 
-
-const ProjectComments = () => {
+const ProjectComments = ({ project }) => {
   const { user } = useAuthContext()
+  const { updateDocument, response } = useCollection('projects')
   const [newComment, setNewComment] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefaulе()
     const commentToAdd = {
       displayName: user.displayName,
       photoURL: user.photoURL,
       content: newComment,
-      createdAt: serverTimestamp(),
-      id: Math.random(),
+      createdAt: Timestamp.fromDate(new Date()),
+      id: uuidv4(),
     };
+
+    await updateDocument(project.id, {
+      comments: [...project.comments, commentToAdd],
+    })
+    if (!response.error) {
+      setNewComment('')
+    }
   }
 
   return (
     <div className='project-comments'>
       <h4>Комментарии</h4>
+
+
+      <ul>
+        {project.comments.length > 0 &&
+          project.comments.map((comment) => (<li key={comment.id}>
+            <div className='comment-author'>
+              <Avatar src={comment.photoURL} />
+              <p>{comment.displayName}</p>
+            </div>
+            <div className='comment-date'>
+              <p>Comment Date</p>
+            </div>
+            <div className='comment-content'>
+              <p>{comment.content}</p>
+            </div>
+          </li>
+          ))}
+      </ul>
       <form className='add-comment' onSubmit={handleSubmit}>
         <label>
           <span>Описание:</span>
