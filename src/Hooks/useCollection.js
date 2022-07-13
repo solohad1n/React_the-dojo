@@ -57,10 +57,8 @@ export const useCollection = (collectionName) => {
         ...newDocument,
         createdAt: serverTimestamp(),
       })
-      console.log(addedDoc)
       dispatch({ type: 'ADDED_DOCUMENT', payload: addedDoc })
     } catch (err) {
-      console.log(err.message)
       dispatch({ type: 'ERROR', payload: err.message })
     }
   }
@@ -69,7 +67,10 @@ export const useCollection = (collectionName) => {
   const updateDocument = async (docId, newDate) => {
     dispatch({ type: 'IS_PENDING' })
     try {
-      const updatedDoc = await setDoc(doc(firestore, 'projects', collectionName, docId), newDate, { merge: true });
+      const updatedDoc = await setDoc(
+        doc(firestore, 'projects', docId),
+        newDate, { merge: true }
+      );
       dispatch({ type: 'UPDATED_DOCUMENT', payload: updatedDoc })
       return updateDoc
     }
@@ -94,7 +95,6 @@ export const useGetCollection = (collectionName, options) => {
     const collectionRef = query(
       collection(firestore, collectionName)
     )
-
 
     const unsubscribe = onSnapshot(collectionRef, (snap) => {
       let results = []

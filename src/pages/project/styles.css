@@ -81,10 +81,23 @@
 .comment-date {
   color: var(--text-color);
   font-size: 0.9em;
-  margin: 4px 0 10px;
+  margin: 4px 0 0;
 }
 
 .comment-content {
   color: var(--text-color);
   font-size: 0.9em;
+  margin-top: 5px;
+  word-break: break-all;
+}
+
+.comment-list {
+  max-height: 450px;
+  overflow-y: scroll;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

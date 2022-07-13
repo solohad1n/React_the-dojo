@@ -4,6 +4,7 @@ import { useAuthContext } from '../../Hooks/useAuthContext'
 import { useCollection } from '../../Hooks/useCollection';
 import { v4 as uuidv4 } from 'uuid'
 import Avatar from '../../components/avatar/Avatar';
+import { toNow } from '../../helpers/date';
 
 const ProjectComments = ({ project }) => {
   const { user } = useAuthContext()
@@ -11,7 +12,7 @@ const ProjectComments = ({ project }) => {
   const [newComment, setNewComment] = useState('');
 
   const handleSubmit = async (e) => {
-    e.preventDefaulе()
+    e.preventDefault()
     const commentToAdd = {
       displayName: user.displayName,
       photoURL: user.photoURL,
@@ -33,15 +34,17 @@ const ProjectComments = ({ project }) => {
       <h4>Комментарии</h4>
 
 
-      <ul>
+      <ul className='comment-list'>
         {project.comments.length > 0 &&
           project.comments.map((comment) => (<li key={comment.id}>
-            <div className='comment-author'>
-              <Avatar src={comment.photoURL} />
-              <p>{comment.displayName}</p>
-            </div>
-            <div className='comment-date'>
-              <p>Comment Date</p>
+            <div className='comment-header'>
+              <div className='comment-author'>
+                <Avatar src={comment.photoURL} />
+                <p>{comment.displayName}</p>
+              </div>
+              <div className='comment-date'>
+                <p>{toNow(comment.createdAt.toDate())}</p>
+              </div>
             </div>
             <div className='comment-content'>
               <p>{comment.content}</p>
@@ -49,6 +52,8 @@ const ProjectComments = ({ project }) => {
           </li>
           ))}
       </ul>
+
+
       <form className='add-comment' onSubmit={handleSubmit}>
         <label>
           <span>Описание:</span>
