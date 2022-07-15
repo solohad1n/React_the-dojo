@@ -1,10 +1,11 @@
 import React from 'react';
 import './style.css'
 
-const Avatar = ({ src }) => {
+const Avatar = ({ src, children, className }) => {
   return (
-    <div className='avatar'>
+    <div className={className + ' avatar'}>
       <img src={src} alt="avatar" />
+      {children && children}
     </div>
   );
 }
