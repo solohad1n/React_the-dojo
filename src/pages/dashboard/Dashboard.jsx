@@ -13,37 +13,34 @@ function Dashboard() {
     setCurrentFilter(newFilter)
   }
 
-  const projects = documents && documents.filter((project) => {
-    switch (currentFilter) {
-      case 'all': {
-        return true
-      }
-      case 'mine': {
-        return project.assignedUsersList.some((assignedUser) => assignedUser.id === user.id)
+  const projects = documents &&
+    documents.filter((project) => {
+      switch (currentFilter) {
+        case 'all': return true;
+        case 'mine': return project.assignedUsersList.some(
+          (assignedUser) => assignedUser.id === user.id
+        )
         case 'development':
-      case 'design':
-      case 'marketing':
-      case 'sales':
-        return project.category === currentFilter
-      default:
-        return true;
-    }
+        case 'design':
+        case 'marketing':
+        case 'sales':
+          return project.category === currentFilter
+        default:
+          return true;
+      }
+    });
 
-
-  }
-  })
-
-return (
-  <div>
-    <h2 className='page-title'>Dashboard</h2>
-    {error && <p className='error'>{error}</p>}
-    {documents && <ProjectFilter
-      handleClick={changeClick}
-      currentFilter={currentFilter}
-    />}
-    {projects && <Projects projects={projects} />}
-  </div >
-)
+  return (
+    <div>
+      <h2 className='page-title'>Dashboard</h2>
+      {error && <p className='error'>{error}</p>}
+      {documents && <ProjectFilter
+        handleClick={changeClick}
+        currentFilter={currentFilter}
+      />}
+      {projects && <Projects projects={projects} />}
+    </div >
+  )
 }
 
 export default Dashboard

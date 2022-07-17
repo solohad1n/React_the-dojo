@@ -30,17 +30,22 @@
 
 /* online users */
 .user-list .online-user {
+  position: absolute;
+  right: -15%;
+  bottom: 15%;
   display: inline-block;
-  margin-right: 10px;
   width: 12px;
   height: 12px;
   background: #0ebb50;
   border-radius: 50%;
-  margin-top: 2px;
+  transform: translate(-30%, 50%);
 }
 
 .username {
-  text-align: right
+  text-align: right;
+  width: min-content;
 }
 
-.user-avatar {}
+.user-avatar {
+  position: relative;
+}
